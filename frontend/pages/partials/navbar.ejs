@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center title-blue" href="/dashboard">
+      <img src="/public/images/gcet-logo.svg" alt="GCET logo" /> GCORE
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="/announcements">Announcements</a></li>
+        <li class="nav-item"><a class="nav-link" href="/clubs">Clubs</a></li>
+        <li class="nav-item"><a class="nav-link" href="/departments">Departments</a></li>
+        <li class="nav-item"><a class="nav-link" href="/career">Career</a></li>
+        <li class="nav-item"><a class="nav-link" href="/placement">Placement</a></li>
+        <% if (currentUser && currentUser.role === 'admin') { %>
+          <li class="nav-item"><a class="nav-link" href="/admin">Admin</a></li>
+        <% } %>
+      </ul>
+      <form method="POST" action="/logout" class="ms-lg-3">
+        <button class="btn btn-outline-primary btn-sm" type="submit">Logout</button>
+      </form>
+    </div>
+  </div>
+</nav>

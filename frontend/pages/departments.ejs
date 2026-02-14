@@ -1,0 +1,5 @@
+<%- include('partials/header', { title }) %><%- include('partials/navbar') %>
+<div class="container py-4"><h2>Department Coordination</h2>
+<div class="card p-3 mb-3"><form method="POST" action="/departments" class="row g-2"><div class="col-md-3"><input name="department" class="form-control" placeholder="Department" required></div><div class="col-md-3"><input name="title" class="form-control" placeholder="Title" required></div><div class="col-md-4"><input name="content" class="form-control" placeholder="Resource / Announcement" required></div><div class="col-md-2"><input name="schedule" class="form-control" placeholder="Schedule"></div><div class="col-12"><button class="btn btn-primary mt-2">Publish</button></div></form></div>
+<% resources.forEach(r => { %><div class="card p-3 mb-2"><strong><%= r.department %> - <%= r.title %></strong><div><%= r.content %></div><small><%= r.schedule || 'No schedule' %></small></div><% }) %>
+</div><%- include('partials/footer') %>

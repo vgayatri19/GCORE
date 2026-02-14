@@ -1,0 +1,5 @@
+<%- include('partials/header', { title }) %><%- include('partials/navbar') %>
+<div class="container py-4"><h2>Career Guidance</h2>
+<div class="card p-3 mb-3"><form method="POST" action="/career" class="row g-2"><div class="col-md-2"><select name="category" class="form-select"><option value="resume">Resume</option><option value="job_search">Job Search</option><option value="interview">Interview</option><option value="skills">Skills</option></select></div><div class="col-md-3"><input name="title" class="form-control" placeholder="Title" required></div><div class="col-md-5"><input name="content" class="form-control" placeholder="Guidance" required></div><div class="col-md-2"><button class="btn btn-primary w-100">Add</button></div></form></div>
+<div class="row g-2"><% resources.forEach(r => { %><div class="col-md-6"><div class="card p-3"><span class="badge bg-primary"><%= r.category %></span><h5 class="mt-2"><%= r.title %></h5><p><%= r.content %></p></div></div><% }) %></div>
+</div><%- include('partials/footer') %>

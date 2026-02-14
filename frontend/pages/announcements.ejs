@@ -1,0 +1,12 @@
+<%- include('partials/header', { title }) %><%- include('partials/navbar') %>
+<div class="container py-4"><h2>Announcements</h2>
+  <div class="card p-3 mb-3">
+    <form method="POST" action="/announcements" class="row g-2">
+      <div class="col-md-3"><input name="title" class="form-control" placeholder="Title" required></div>
+      <div class="col-md-5"><input name="message" class="form-control" placeholder="Message" required></div>
+      <div class="col-md-2"><select name="scope" class="form-select"><option value="global">Global</option><option value="club">Club</option><option value="department">Department</option><option value="placement">Placement</option></select></div>
+      <div class="col-md-2"><button class="btn btn-primary w-100">Post</button></div>
+    </form>
+  </div>
+  <% announcements.forEach(a => { %><div class="card p-3 mb-2"><div class="d-flex justify-content-between"><div><h5><%= a.title %></h5><p class="mb-1"><%= a.message %></p><small><%= a.scope %> by <%= a.createdBy?.name || 'Unknown' %></small></div><% if (currentUser.role === 'admin' || currentUser.role === 'faculty') { %><form method="POST" action="/announcements/<%= a._id %>/delete"><button class="btn btn-sm btn-danger">Delete</button></form><% } %></div></div><% }) %>
+</div><%- include('partials/footer') %>

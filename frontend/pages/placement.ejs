@@ -1,0 +1,9 @@
+<%- include('partials/header', { title }) %><%- include('partials/navbar') %>
+<div class="container py-4"><h2>Placement Services</h2>
+<div class="row g-3"><div class="col-lg-6"><div class="card p-3"><h4>Create Job Listing</h4><form method="POST" action="/placement/jobs"><input name="company" class="form-control mb-2" placeholder="Company" required><input name="role" class="form-control mb-2" placeholder="Role" required><input name="description" class="form-control mb-2" placeholder="Description" required><input name="deadline" type="date" class="form-control mb-2" required><input name="recruiterContact" class="form-control mb-2" placeholder="Recruiter contact"><button class="btn btn-primary">Publish Job</button></form></div></div>
+<div class="col-lg-6"><div class="card p-3"><h4>Create Placement Drive</h4><form method="POST" action="/placement/drives"><input name="title" class="form-control mb-2" placeholder="Drive title" required><input name="details" class="form-control mb-2" placeholder="Details" required><input name="date" type="date" class="form-control mb-2" required><button class="btn btn-primary">Create Drive</button></form></div></div></div>
+<h4 class="mt-4">Job Listings</h4>
+<% jobs.forEach(j => { %><div class="card p-3 mb-2 d-flex flex-row justify-content-between"><div><strong><%= j.company %></strong> - <%= j.role %><div><%= j.description %></div></div><% if (currentUser.role === 'student') { %><form method="POST" action="/placement/jobs/<%= j._id %>/apply"><button class="btn btn-sm btn-outline-primary">Apply</button></form><% } %></div><% }) %>
+<h4 class="mt-4">Placement Drives</h4>
+<% drives.forEach(d => { %><div class="card p-3 mb-2"><strong><%= d.title %></strong> - <%= new Date(d.date).toLocaleDateString() %><div><%= d.details %></div></div><% }) %>
+</div><%- include('partials/footer') %>

@@ -1,0 +1,6 @@
+body { background: #ffffff; }
+h1, h2, h3, h4, h5, h6, .title-blue { color: #00008B; }
+.card { border: 1px solid #dfe3f1; }
+.navbar-brand img { width: 34px; height: 34px; margin-right: 8px; }
+.footer { border-top: 1px solid #e5e7eb; margin-top: 2rem; padding: 1rem 0; color: #5b6470; }
+.table-responsive { max-height: 380px; }

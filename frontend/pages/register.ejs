@@ -1,0 +1,17 @@
+<%- include('partials/header', { title }) %>
+<div class="container py-5" style="max-width: 600px;">
+  <h2 class="mb-4">Register</h2>
+  <form method="POST" action="/register" class="card p-4">
+    <div class="mb-2"><label class="form-label">Name</label><input name="name" class="form-control" required /></div>
+    <div class="mb-2"><label class="form-label">Email</label><input name="email" type="email" class="form-control" required /></div>
+    <div class="mb-2"><label class="form-label">Password</label><input name="password" type="password" class="form-control" minlength="8" required /></div>
+    <div class="mb-3">
+      <label class="form-label">Role</label>
+      <select name="role" class="form-select">
+        <option value="student">Student</option><option value="faculty">Faculty</option><option value="club_coordinator">Club Coordinator</option><option value="placement_user">Placement User</option><option value="admin">Admin</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" type="submit">Create Account</button>
+  </form>
+</div>
+<%- include('partials/footer') %>

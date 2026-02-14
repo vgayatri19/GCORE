@@ -1,0 +1,7 @@
+<%- include('partials/header', { title }) %><%- include('partials/navbar') %>
+<div class="container py-4"><h2>Club Management</h2>
+<div class="row g-3"><div class="col-lg-6"><div class="card p-3"><h4>Create Club</h4><form method="POST" action="/clubs"><input class="form-control mb-2" name="name" placeholder="Club name" required><textarea class="form-control mb-2" name="description" placeholder="Description" required></textarea><button class="btn btn-primary">Create</button></form></div></div>
+<div class="col-lg-6"><div class="card p-3"><h4>Create Event</h4><form method="POST" action="/clubs/events"><input class="form-control mb-2" name="title" placeholder="Event title" required><input class="form-control mb-2" name="description" placeholder="Description"><input class="form-control mb-2" name="date" type="date" required><select name="clubId" class="form-select mb-2"><option value="">General</option><% clubs.forEach(c=> { %><option value="<%= c._id %>"><%= c.name %></option><% }) %></select><button class="btn btn-primary">Create Event</button></form></div></div></div>
+<h4 class="mt-4">Events & Participation</h4>
+<% events.forEach(e => { %><div class="card p-3 mb-2 d-flex flex-row justify-content-between"><div><strong><%= e.title %></strong> (<%= new Date(e.date).toLocaleDateString() %>) - <%= e.status %></div><% if (currentUser.role === 'student') { %><form method="POST" action="/clubs/events/<%= e._id %>/participate"><button class="btn btn-sm btn-outline-primary">Participate</button></form><% } %></div><% }) %>
+</div><%- include('partials/footer') %>

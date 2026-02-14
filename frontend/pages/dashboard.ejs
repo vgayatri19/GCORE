@@ -1,0 +1,17 @@
+<%- include('partials/header', { title }) %>
+<%- include('partials/navbar') %>
+<div class="container py-4">
+  <h2>Student Dashboard</h2>
+  <p>Welcome, <strong><%= currentUser.name %></strong> (<%= currentUser.role %>)</p>
+  <div class="row g-3">
+    <div class="col-md-6">
+      <div class="card p-3"><h4>Centralized Notifications</h4><ul><% notifications.forEach(n => { %><li><strong><%= n.title %>:</strong> <%= n.message %></li><% }) %></ul></div>
+    </div>
+    <div class="col-md-6">
+      <div class="card p-3"><h4>Latest Announcements</h4><ul><% announcements.forEach(a => { %><li><strong><%= a.title %>:</strong> <%= a.message %></li><% }) %></ul></div>
+    </div>
+    <div class="col-md-6"><div class="card p-3"><h4>Upcoming Events</h4><ul><% events.forEach(e => { %><li><%= e.title %> - <%= new Date(e.date).toLocaleDateString() %></li><% }) %></ul></div></div>
+    <div class="col-md-6"><div class="card p-3"><h4>Placement Applications</h4><ul><% applications.forEach(a => { %><li><%= a.job?.company %> / <%= a.job?.role %> - <%= a.status %></li><% }) %></ul></div></div>
+  </div>
+</div>
+<%- include('partials/footer') %>

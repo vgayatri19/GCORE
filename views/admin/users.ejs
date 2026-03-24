@@ -1,0 +1,87 @@
+<%- include('../partials/header') %>
+
+<div class="container py-5 min-vh-100">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+                    <li class="breadcrumb-item active fw-bold text-brand">User Management</li>
+                </ol>
+            </nav>
+            <h1 class="display-6 fw-bold text-brand">Directory & Approvals</h1>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-5">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 bg-white">
+                <thead class="bg-light text-muted small text-uppercase fw-bold">
+                    <tr>
+                        <th class="ps-4 py-3">User</th>
+                        <th class="py-3">Role</th>
+                        <th class="py-3">Status</th>
+                        <th class="py-3">Joined</th>
+                        <th class="pe-4 py-3 text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="border-top-0">
+                    <% users.forEach(user => { %>
+                        <tr class="<%= !user.isApproved ? 'bg-danger bg-opacity-10' : '' %>">
+                            <td class="ps-4 py-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-brand text-white rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" style="width: 40px; height: 40px; font-weight: bold;">
+                                        <%= user.name.charAt(0) %>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-dark"><%= user.name %></div>
+                                        <div class="small text-muted"><%= user.email %></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3">
+                                <form action="/admin/users/<%= user.id %>/role" method="POST" class="m-0">
+                                    <select name="role" onchange="this.form.submit()" class="form-select form-select-sm bg-light border-0 rounded-3 shadow-none w-auto">
+                                        <% ['Student', 'Faculty', 'HOD', 'Dean', 'Director', 'Placement Officer', 'Admin'].forEach(role => { %>
+                                            <option value="<%= role %>" <%= user.role === role ? 'selected' : '' %>><%= role %></option>
+                                        <% }) %>
+                                    </select>
+                                </form>
+                            </td>
+                            <td class="py-3">
+                                <% if (user.isApproved) { %>
+                                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1"><i class="fas fa-check-circle me-1"></i> Active</span>
+                                <% } else { %>
+                                    <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1"><i class="fas fa-clock me-1"></i> Pending</span>
+                                <% } %>
+                            </td>
+                            <td class="py-3 text-muted small">
+                                <%= new Date(user.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) %>
+                            </td>
+                            <td class="pe-4 py-3 text-end">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <% if (!user.isApproved) { %>
+                                        <form action="/admin/users/<%= user.id %>/approve" method="POST" class="m-0">
+                                            <button type="submit" class="btn btn-sm btn-success rounded-3 fw-bold"><i class="fas fa-check me-1"></i> Approve</button>
+                                        </form>
+                                    <% } %>
+                                    <form action="/admin/users/<%= user.id %>/reject" method="POST" class="m-0" onsubmit="return confirm('Delete this user account permanently?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-3"><i class="fas fa-trash-alt"></i></button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+        <% if (users.length === 0) { %>
+            <div class="text-center py-5">
+                <i class="fas fa-users-slash text-muted opacity-25 mb-3" style="font-size: 3rem;"></i>
+                <h5 class="text-muted fw-bold">No Users Found</h5>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

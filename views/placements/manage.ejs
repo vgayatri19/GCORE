@@ -1,0 +1,127 @@
+<%- include('../partials/header') %>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-tasks text-primary"></i> Manage Placement Records</h2>
+        <a href="/placements" class="btn btn-outline-secondary btn-sm">Back to Dashboard</a>
+    </div>
+
+    <div class="row">
+        <!-- Add Record Form -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white fw-bold">Add Student Record</div>
+                <div class="card-body">
+                    <form action="/placements/records" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Student Name</label>
+                            <input type="text" name="studentName" class="form-control" placeholder="e.g. John Doe"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Roll Number</label>
+                            <input type="text" name="rollNumber" class="form-control" placeholder="e.g. 22R11A6201"
+                                required>
+                            <div class="form-text small text-muted">
+                                CSE-CS Ranges: 22R11A6201-63, 23R15A6201-07
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Department</label>
+                            <select name="department" class="form-select" required>
+                                <option value="CSE">CSE</option>
+                                <option value="CSE-AIML">CSE-AIML</option>
+                                <option value="CSE-DS">CSE-DS</option>
+                                <option value="CSE-CS" selected>CSE-CS</option>
+                                <option value="EEE">EEE</option>
+                                <option value="ECE">ECE</option>
+                                <option value="Civil">Civil</option>
+                                <option value="Mech">Mech</option>
+                                <option value="MBA">MBA</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Company</label>
+                            <input type="text" name="company" class="form-control" placeholder="e.g. Google" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Package (LPA)</label>
+                            <input type="number" step="0.1" name="package" class="form-control" placeholder="e.g. 12.5"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Type</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="type" value="On-Campus" checked>
+                                <label class="form-check-label small">On-Campus</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="type" value="Off-Campus">
+                                <label class="form-check-label small">Off-Campus</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Add Record</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Records Table -->
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <span class="fw-bold">Placed Students Records (Final Year)</span>
+                    <span class="badge bg-info text-dark">
+                        <%= records.length %> Records
+                    </span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
+                        <table class="table table-hover table-striped mb-0 small">
+                            <thead class="table-light sticky-top">
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Roll No</th>
+                                    <th>Dept</th>
+                                    <th>Company</th>
+                                    <th>Package</th>
+                                    <th>Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% records.forEach(record=> { %>
+                                    <tr>
+                                        <td><strong>
+                                                <%= record.studentName %>
+                                            </strong></td>
+                                        <td>
+                                            <%= record.rollNumber %>
+                                        </td>
+                                        <td><span class="badge bg-secondary">
+                                                <%= record.department %>
+                                            </span></td>
+                                        <td>
+                                            <%= record.company %>
+                                        </td>
+                                        <td>
+                                            <%= record.package %> LPA
+                                        </td>
+                                        <td>
+                                            <%= record.type %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                                        <% if (records.length===0) { %>
+                                            <tr>
+                                                <td colspan="6" class="text-center py-4">No records found. Start by
+                                                    adding one!</td>
+                                            </tr>
+                                            <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>

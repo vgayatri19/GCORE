@@ -1,0 +1,135 @@
+<%- include('../partials/header') %>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-tasks text-primary me-2"></i>Event Approvals</h2>
+        <span class="badge bg-primary px-3 py-2">
+            <%= pendingEvents.length %> Pending Requests
+        </span>
+    </div>
+
+    <% if (pendingEvents.length===0) { %>
+        <div class="card border-0 shadow-sm text-center py-5">
+            <div class="card-body">
+                <i class="fas fa-check-circle fa-4x text-light mb-3"></i>
+                <h4 class="text-muted">No pending approvals</h4>
+                <p class="text-secondary small">Everything is up to date for your role.</p>
+            </div>
+        </div>
+        <% } else { %>
+            <div class="row g-4">
+                <% pendingEvents.forEach(event=> { %>
+                    <div class="col-md-12">
+                        <div class="card border-0 shadow-sm overflow-hidden event-approval-card">
+                            <div class="row g-0">
+                                <div class="col-md-8 p-4">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span class="badge bg-light text-primary border me-2">
+                                            <%= event.type %>
+                                        </span>
+                                        <span class="small text-muted"><i class="fas fa-calendar-alt me-1"></i>
+                                            <%= new Date(event.date).toLocaleDateString() %>
+                                        </span>
+                                    </div>
+                                    <h4 class="fw-bold mb-1">
+                                        <%= event.title %>
+                                    </h4>
+                                    <p class="text-secondary small mb-3">Proposed by: <strong>
+                                            <%= event.createdBy.name %>
+                                        </strong> for <strong>
+                                            <%= event.clubName %>
+                                        </strong></p>
+
+                                    <div class="bg-light rounded p-3 mb-0">
+                                        <h6 class="fw-bold small mb-2 text-uppercase">Description</h6>
+                                        <p class="small mb-2">
+                                            <%= event.description %>
+                                        </p>
+                                        <div class="d-flex gap-4 mt-2">
+                                            <div class="small"><i class="fas fa-map-marker-alt text-danger me-1"></i>
+                                                <%= event.location %>
+                                            </div>
+                                            <div class="small"><i
+                                                    class="fas fa-user-tie text-muted me-1"></i>Coordinator: <%=
+                                                    event.coordinator %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="col-md-4 bg-light p-4 border-start d-flex flex-column justify-content-center">
+                                    <div class="mb-4 text-center">
+                                        <h6 class="small fw-bold text-uppercase text-muted mb-3">Current Status</h6>
+                                        <div class="d-flex justify-content-center align-items-center gap-2">
+                                            <div class="approval-step active" title="Coordinator">C</div>
+                                            <i class="fas fa-chevron-right small text-muted"></i>
+                                            <div class="approval-step <%= (['HOD', 'Dean', 'Director', 'Finalized'].includes(event.approvalStage)) ? 'active' : '' %>"
+                                                title="HOD">H</div>
+                                            <i class="fas fa-chevron-right small text-muted"></i>
+                                            <div class="approval-step <%= (['Dean', 'Director', 'Finalized'].includes(event.approvalStage)) ? 'active' : '' %>"
+                                                title="Dean">D</div>
+                                            <i class="fas fa-chevron-right small text-muted"></i>
+                                            <div class="approval-step <%= (['Director', 'Finalized'].includes(event.approvalStage)) ? 'active' : '' %>"
+                                                title="Director">P</div>
+                                        </div>
+                                        <small class="text-primary mt-3 d-block fw-bold">Awaiting: <%=
+                                                event.approvalStage %></small>
+                                    </div>
+
+                                    <div class="d-grid gap-2">
+                                        <form action="/events/<%= event.id %>/approve" method="POST">
+                                            <button class="btn btn-success w-100 fw-bold">Approve & Advance</button>
+                                        </form>
+                                        <button class="btn btn-outline-danger btn-sm" data-bs-toggle="collapse"
+                                            data-bs-target="#rejectForm<%= event.id %>">
+                                            Reject Proposal
+                                        </button>
+                                    </div>
+
+                                    <div class="collapse mt-3" id="rejectForm<%= event.id %>">
+                                        <form action="/events/<%= event.id %>/reject" method="POST">
+                                            <textarea name="reason" class="form-control form-control-sm mb-2"
+                                                placeholder="Reason for rejection..." required></textarea>
+                                            <button class="btn btn-danger btn-sm w-100">Confirm Rejection</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% }) %>
+            </div>
+            <% } %>
+
+                <style>
+                    .approval-step {
+                        width: 32px;
+                        height: 32px;
+                        border-radius: 50%;
+                        background: #e9ecef;
+                        color: #6c757d;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-weight: bold;
+                        font-size: 0.8rem;
+                        border: 2px solid #dee2e6;
+                    }
+
+                    .approval-step.active {
+                        background: #0d6efd;
+                        color: white;
+                        border-color: #0d6efd;
+                        box-shadow: 0 0 10px rgba(13, 110, 253, 0.3);
+                    }
+
+                    .event-approval-card {
+                        transition: all 0.3s ease;
+                    }
+
+                    .event-approval-card:hover {
+                        transform: scale(1.01);
+                        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1) !important;
+                    }
+                </style>
+
+                <%- include('../partials/footer') %>

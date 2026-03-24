@@ -1,0 +1,22 @@
+<%- include('partials/header') %>
+
+    <div class="row min-vh-75 align-items-center">
+        <div class="col-md-6 mx-auto text-center">
+            <div class="premium-card p-5 shadow-lg border-0 border-top border-5 border-danger">
+                <h1 class="display-1 fw-800 text-danger mb-0">500</h1>
+                <div class="bg-light rounded-pill d-inline-block px-3 py-1 mb-4 border">
+                    <small class="fw-bold">Server Error</small>
+                </div>
+                <h3 class="fw-bold mb-3">Critical System Failure</h3>
+                <p class="text-muted mb-5">Something went wrong on our end. Our technicians have been notified and are
+                    working to resolve the issue.</p>
+                <div class="alert alert-light text-start small border">
+                    <code
+                        class="text-danger"><%= typeof error !== 'undefined' ? error.message : 'Unknown internal error' %></code>
+                </div>
+                <a href="/" class="btn btn-outline-dark rounded-pill px-5 py-3 fw-bold mt-4">Emergency Restart</a>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>

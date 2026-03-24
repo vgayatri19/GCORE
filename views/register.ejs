@@ -1,0 +1,218 @@
+<%- include('partials/header') %>
+
+    <div class="row justify-content-center py-5">
+        <div class="col-md-10 col-lg-8">
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                <div class="row g-0">
+                    <div
+                        class="col-md-5 bg-success d-none d-md-flex align-items-center justify-content-center text-white p-5">
+                        <div class="text-center">
+                            <i class="fas fa-university fa-5x mb-4"></i>
+                            <h2 class="fw-bold">GCORE</h2>
+                            <p class="opacity-75">Join the institutional management network. Secure, professional, and
+                                unified.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-body p-5">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h3 class="fw-bold text-success mb-0">Create Account</h3>
+                                <i class="fas fa-user-plus text-muted fs-4"></i>
+                            </div>
+
+                            <% if (typeof error !=='undefined' && error) { %>
+                                <div class="alert alert-danger alert-dismissible fade show border-0 small shadow-sm mb-4"
+                                    role="alert">
+                                    <i class="fas fa-exclamation-circle me-2"></i>
+                                    <%= error %>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                                <% } %>
+
+                                    <form action="/auth/register" method="POST" id="regForm">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label small fw-bold text-muted text-uppercase">Full
+                                                    Name</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-0"><i
+                                                            class="fas fa-user text-muted"></i></span>
+                                                    <input type="text" class="form-control bg-light border-0"
+                                                        name="name" placeholder="John Doe" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label
+                                                    class="form-label small fw-bold text-muted text-uppercase">Institutional
+                                                    Email</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-0"><i
+                                                            class="fas fa-envelope text-muted"></i></span>
+                                                    <input type="email" class="form-control bg-light border-0"
+                                                        name="email" placeholder="user@gcet.edu.in"
+                                                        pattern=".+@gcet\.edu\.in"
+                                                        title="Please use your institutional @gcet.edu.in email"
+                                                        required>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <label
+                                                    class="form-label small fw-bold text-muted text-uppercase">Password</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-0"><i
+                                                            class="fas fa-lock text-muted"></i></span>
+                                                    <input type="password" class="form-control bg-light border-0"
+                                                        id="password" name="password" placeholder="••••••••"
+                                                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9\s]).{8,}$"
+                                                        title="Minimum 8 characters, at least one uppercase, one lowercase, one number and one special character"
+                                                        required>
+                                                    <button class="btn btn-light border-0" type="button"
+                                                        id="togglePassword">
+                                                        <i class="fas fa-eye text-muted"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="progress mt-2" style="height: 4px;">
+                                                    <div id="pwStrength" class="progress-bar" role="progressbar"
+                                                        style="width: 0%"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label
+                                                    class="form-label small fw-bold text-muted text-uppercase">Primary
+                                                    Role</label>
+                                                <select class="form-select bg-light border-0" id="role" name="role"
+                                                    required>
+                                                    <option value="Student">Student</option>
+                                                    <option value="Faculty">Faculty</option>
+                                                    <option value="HOD">HOD</option>
+                                                    <option value="Dean">Dean</option>
+                                                    <option value="Director">Director</option>
+                                                    <option value="Placement Officer">Placement Officer</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label
+                                                    class="form-label small fw-bold text-muted text-uppercase">Department</label>
+                                                <select class="form-select bg-light border-0" name="department"
+                                                    id="deptSelect" required>
+                                                    <option value="">Choose...</option>
+                                                    <option value="CSE">CSE</option>
+                                                    <option value="CSE-AIML">CSE-AIML</option>
+                                                    <option value="CSE-DS">CSE-DS</option>
+                                                    <option value="CSE-CS">CSE-CS</option>
+                                                    <option value="EEE">EEE</option>
+                                                    <option value="ECE">ECE</option>
+                                                    <option value="Civil">Civil</option>
+                                                    <option value="Mech">Mech</option>
+                                                    <option value="MBA">MBA</option>
+                                                    <option value="Management">Management</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-12 mt-4 pt-2 border-top">
+                                                <div class="form-check form-switch mb-3">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        id="clubMemberSwitch">
+                                                    <label class="form-check-label small fw-bold text-muted"
+                                                        for="clubMemberSwitch">Are you a Club Member/Leader?</label>
+                                                </div>
+
+                                                <div id="clubFields" style="display: none;">
+                                                    <div class="row g-3">
+                                                        <div class="col-md-6">
+                                                            <label
+                                                                class="form-label small fw-bold text-muted text-uppercase">Club
+                                                                Role</label>
+                                                            <select class="form-select border-success-subtle"
+                                                                name="clubRole">
+                                                                <option value="None">None</option>
+                                                                <option value="Member">Member</option>
+                                                                <option value="Vice President">Vice President</option>
+                                                                <option value="President">President</option>
+                                                                <option value="Faculty Coordinator">Faculty Coordinator
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label
+                                                                class="form-label small fw-bold text-muted text-uppercase">Managed
+                                                                Club</label>
+                                                            <input type="text"
+                                                                class="form-control border-success-subtle"
+                                                                name="managedClub"
+                                                                placeholder="e.g. Cybersecurity Club">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12 mt-4">
+                                                <button type="submit"
+                                                    class="btn btn-success w-100 py-3 fw-bold shadow-sm">Complete
+                                                    Registration</button>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    <div class="mt-4 text-center">
+                                        <p class="text-muted small">Already part of the system? <a href="/login"
+                                                class="text-success fw-bold text-decoration-none">Login here</a></p>
+                                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Password Toggle
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+        const icon = togglePassword.querySelector('i');
+
+        togglePassword.addEventListener('click', function () {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
+
+        // Club Fields Toggle
+        const clubSwitch = document.querySelector('#clubMemberSwitch');
+        const clubFields = document.querySelector('#clubFields');
+
+        clubSwitch.addEventListener('change', function () {
+            clubFields.style.display = this.checked ? 'block' : 'none';
+        });
+
+        // Password Strength Indicator
+        password.addEventListener('input', function () {
+            let val = this.value;
+            let strength = 0;
+            if (val.length >= 8) strength += 25;
+            if (val.match(/[A-Z]/)) strength += 25;
+            if (val.match(/[0-9]/)) strength += 25;
+            if (val.match(/[@$!%*?&]/)) strength += 25;
+
+            const bar = document.querySelector('#pwStrength');
+            bar.style.width = strength + '%';
+            if (strength <= 25) bar.className = 'progress-bar bg-danger';
+            else if (strength <= 50) bar.className = 'progress-bar bg-warning';
+            else if (strength <= 75) bar.className = 'progress-bar bg-info';
+            else bar.className = 'progress-bar bg-success';
+        });
+
+        // Auto-fix domain hint
+        const email = document.querySelector('input[type="email"]');
+        email.addEventListener('blur', function () {
+            if (this.value && !this.value.includes('@')) {
+                this.value += '@gcet.edu.in';
+            }
+        });
+    </script>
+
+    <%- include('partials/footer') %>

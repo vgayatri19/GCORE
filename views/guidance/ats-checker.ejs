@@ -1,0 +1,239 @@
+<%- include('../partials/header') %>
+
+<div class="container-fluid py-5 bg-light min-vh-100">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/placements" class="text-decoration-none text-muted">Placements</a></li>
+                    <li class="breadcrumb-item active fw-bold text-brand">Resume Optimizer</li>
+                </ol>
+            </nav>
+
+            <!-- Main Application Card -->
+            <div class="premium-card shadow-lg border-0 bg-white overflow-hidden rounded-4">
+                <div class="row g-0">
+                    <!-- Input Section -->
+                    <div class="col-md-5 bg-brand text-white p-5 d-flex flex-column" id="leftPanel">
+                        <div class="mb-auto">
+                            <h2 class="display-6 fw-bold mb-4">Resume <br><span class="text-warning">Intelligence</span></h2>
+                            <p class="opacity-75 mb-5">Upload your resume and analyze it against your target Job Description. We extract context to score you out of 10.</p>
+                            
+                            <form id="atsForm" onsubmit="checkATS(event)">
+                                <div class="mb-4">
+                                    <label class="form-label small text-uppercase fw-bold opacity-75">Upload Resume (.pdf, .docx)</label>
+                                    <input type="file" id="resumeFile" name="resumeFile" accept=".pdf,.doc,.docx" class="form-control bg-white bg-opacity-10 border-white border-opacity-25 text-white" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label small text-uppercase fw-bold opacity-75">Target Keywords / Job Description</label>
+                                    <textarea id="keywords" name="keywords" class="form-control bg-white bg-opacity-10 border-white border-opacity-25 text-white placeholder-light" 
+                                        rows="4" placeholder="Paste JD or comma-separated keywords..."></textarea>
+                                </div>
+                                <button type="submit" id="submitBtn" class="btn btn-warning w-100 fw-bold py-3 rounded-3 shadow-sm hover-up">
+                                    <i class="fas fa-bolt me-2"></i> Analyze Optimization
+                                </button>
+                            </form>
+
+                            <div id="resetBtnContainer" class="d-none">
+                                <button onclick="resetATS()" class="btn btn-outline-light w-100 py-3 rounded-3 mt-4">
+                                    <i class="fas fa-redo me-2"></i> Analyze Another Resume
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-5 pt-5 opacity-50 small d-none d-md-block">
+                            <i class="fas fa-info-circle me-1"></i> Max upload size is 5MB. Powered by GCORE NLP Engine.
+                        </div>
+                    </div>
+
+                    <!-- Results Section -->
+                    <div class="col-md-7 p-5">
+                        <div id="idleState" class="text-center py-5">
+                            <i class="fas fa-file-upload text-brand opacity-10 mb-4" style="font-size: 8rem;"></i>
+                            <h4 class="text-muted">Drop Your Resume</h4>
+                            <p class="text-muted small">Upload your file on the left to generate actionable insights.</p>
+                        </div>
+
+                        <div id="atsResult" class="d-none animate-fade-in">
+                            <div class="text-center mb-5">
+                                <div class="position-relative d-inline-block">
+                                    <canvas id="scoreChart" width="220" height="220"></canvas>
+                                    <div class="position-absolute top-50 start-50 translate-middle text-center">
+                                        <h1 class="display-4 fw-bold mb-0 text-brand"><span id="atsScore">0</span><span class="fs-4 text-muted">/10</span></h1>
+                                        <small class="text-muted text-uppercase fw-bold">Match Score</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-4 mb-5">
+                                <div class="col-md-4">
+                                    <div class="p-3 bg-light rounded-3 text-center h-100">
+                                        <small class="text-muted text-uppercase d-block mb-1">Technical</small>
+                                        <h4 class="fw-bold mb-0 text-dark"><span id="techScore">0</span>/10</h4>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="p-3 bg-light rounded-3 text-center h-100">
+                                        <small class="text-muted text-uppercase d-block mb-1">Experience</small>
+                                        <h4 class="fw-bold mb-0 text-dark"><span id="expScore">0</span>/10</h4>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="p-3 bg-light rounded-3 text-center h-100">
+                                        <small class="text-muted text-uppercase d-block mb-1">Soft Skills</small>
+                                        <h4 class="fw-bold mb-0 text-dark"><span id="softScore">0</span>/10</h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card border-0 bg-light p-4 rounded-4 mb-4">
+                                <h6 class="fw-bold mb-3"><i class="fas fa-lightbulb me-2 text-warning"></i> Actionable Suggestions</h6>
+                                <div id="suggestionsList" class="d-flex flex-column gap-2 text-muted small">
+                                    <!-- Suggestions populate here -->
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="small fw-bold text-success mb-2 text-uppercase">Top Strengths</div>
+                                    <div id="matchedList" class="d-flex flex-wrap gap-2"></div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="small fw-bold text-danger mb-2 text-uppercase">Missing Keywords</div>
+                                    <div id="missingList" class="d-flex flex-wrap gap-2"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    let myChart = null;
+
+    async function checkATS(e) {
+        e.preventDefault();
+        const form = document.getElementById('atsForm');
+        const formData = new FormData(form);
+
+        if (!document.getElementById('resumeFile').files[0]) {
+             return alert('Please select a resume file (.pdf or .docx)');
+        }
+
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Extracting & Analyzing...';
+
+        try {
+            const response = await fetch('/guidance/ats-checker', {
+                method: 'POST',
+                body: formData // Send as FormData, not JSON
+            });
+
+            if(!response.ok) {
+                 const errData = await response.json();
+                 throw new Error(errData.error || 'Server error');
+            }
+
+            const data = await response.json();
+
+            // Transition UI
+            document.getElementById('idleState').classList.add('d-none');
+            document.getElementById('atsResult').classList.remove('d-none');
+            form.classList.add('d-none');
+            document.getElementById('resetBtnContainer').classList.remove('d-none');
+
+            // Set Scores (Out of 10)
+            document.getElementById('atsScore').innerText = data.score;
+            if (data.categories) {
+                document.getElementById('techScore').innerText = data.categories.technical.score;
+                document.getElementById('expScore').innerText = data.categories.experience.score;
+                document.getElementById('softScore').innerText = data.categories.soft.score;
+            }
+
+            // Suggestions List
+            if(data.suggestions && data.suggestions.length > 0) {
+                 document.getElementById('suggestionsList').innerHTML = data.suggestions.map(s => 
+                     `<div class="d-flex align-items-start"><i class="fas fa-check-circle text-success mt-1 me-2"></i><span>${s}</span></div>`
+                 ).join('');
+            } else {
+                 document.getElementById('suggestionsList').innerHTML = "<div>Your resume looks well optimized.</div>";
+            }
+
+            // Keyword Bubbles
+            document.getElementById('matchedList').innerHTML = data.matches.slice(0, 10).map(m => 
+                `<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1">${m}</span>`
+            ).join('') || '<span class="text-muted small">No significant matches found.</span>';
+
+            document.getElementById('missingList').innerHTML = data.missing.slice(0, 10).map(m => 
+                `<span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1">${m}</span>`
+            ).join('') || '<span class="text-muted small">Great! No major gaps detected.</span>';
+
+
+            // Render Chart
+            renderChart(data.score);
+
+        } catch (err) {
+            console.error(err);
+            alert('Analysis failed: ' + err.message);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-bolt me-2"></i> Analyze Optimization';
+        }
+    }
+
+    function renderChart(score) {
+        if (myChart) myChart.destroy();
+        
+        const ctx = document.getElementById('scoreChart').getContext('2d');
+        const color = score < 5 ? '#dc3545' : (score < 8 ? '#fbbf24' : '#059669');
+        
+        myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [score, 10 - score], // Data out of 10
+                    backgroundColor: [color, '#f1f5f9'],
+                    borderWidth: 0,
+                    circumference: 270,
+                    rotation: 225,
+                    borderRadius: 10
+                }]
+            },
+            options: {
+                cutout: '85%',
+                plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                animation: { duration: 2000, easing: 'easeOutQuart' }
+            }
+        });
+    }
+
+    function resetATS() {
+        document.getElementById('atsForm').classList.remove('d-none');
+        document.getElementById('atsForm').reset();
+        document.getElementById('atsResult').classList.add('d-none');
+        document.getElementById('idleState').classList.remove('d-none');
+        document.getElementById('resetBtnContainer').classList.add('d-none');
+        if (myChart) myChart.destroy();
+    }
+</script>
+
+<style>
+    .bg-brand { background: #021849; }
+    .text-brand { color: #021849; }
+    .placeholder-light::placeholder { color: rgba(255, 255, 255, 0.4); }
+    .hover-up { transition: transform 0.2s; }
+    .hover-up:hover { transform: translateY(-3px); }
+    .premium-card { border-radius: 1.5rem; }
+    .animate-fade-in { animation: fadeIn 0.8s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+
+<%- include('../partials/footer') %>
+

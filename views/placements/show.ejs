@@ -1,0 +1,84 @@
+<%- include('../partials/header') %>
+
+    <div class="mb-4">
+        <a href="/placements" class="btn btn-outline-secondary"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">
+                <%= drive.companyName %> - <%= drive.role %>
+            </h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Package:</strong>
+                        <%= drive.package %>
+                    </p>
+                    <p><strong>Date:</strong>
+                        <%= new Date(drive.driveDate).toDateString() %>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Eligibility:</strong>
+                        <%= drive.eligibilityCriteria %>
+                    </p>
+                    <p><strong>Deadline:</strong>
+                        <%= new Date(drive.applicationDeadline).toDateString() %>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-light">
+            <h5>Applicants (<%= applications.length %>)</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Email</th>
+                            <th>Department</th>
+                            <th>Applied At</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% applications.forEach(app=> { %>
+                            <tr>
+                                <td>
+                                    <%= app.student.name %>
+                                </td>
+                                <td>
+                                    <%= app.student.email %>
+                                </td>
+                                <td>
+                                    <%= app.student.department %>
+                                </td>
+                                <td>
+                                    <%= new Date(app.appliedAt).toLocaleString() %>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">
+                                        <%= app.status %>
+                                    </span>
+                                </td>
+                            </tr>
+                            <% }) %>
+                                <% if (applications.length===0) { %>
+                                    <tr>
+                                        <td colspan="5" class="text-center">No applicants yet.</td>
+                                    </tr>
+                                    <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>

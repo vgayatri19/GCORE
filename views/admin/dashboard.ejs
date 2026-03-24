@@ -1,0 +1,92 @@
+<%- include('../partials/header') %>
+
+<div class="container py-5 min-vh-100">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h1 class="display-6 fw-bold text-brand mb-1">Admin Dashboard</h1>
+            <p class="text-muted">Manage system data, incoming registrations, and permissions.</p>
+        </div>
+        <a href="/admin/users" class="btn btn-warning rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center">
+            <i class="fas fa-users-cog me-2"></i> Manage Users
+            <% if (stats.pendingUsers > 0) { %>
+                <span class="badge bg-danger ms-2 rounded-circle px-2 py-1"><%= stats.pendingUsers %></span>
+            <% } %>
+        </a>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card border-0 bg-brand text-white shadow-sm rounded-4 p-4 h-100 position-relative overflow-hidden">
+                <i class="fas fa-users position-absolute opacity-10" style="font-size: 6rem; right: -15px; bottom: -15px;"></i>
+                <div class="text-uppercase small fw-bold text-warning mb-2">Total Users</div>
+                <h2 class="display-4 fw-bold mb-0"><%= stats.totalUsers %></h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 bg-white shadow-sm rounded-4 p-4 h-100 position-relative overflow-hidden <%= stats.pendingUsers > 0 ? 'border-start border-danger border-5' : '' %>">
+                <i class="fas fa-user-clock position-absolute opacity-10 text-brand" style="font-size: 6rem; right: -15px; bottom: -15px;"></i>
+                <div class="text-uppercase small fw-bold text-muted mb-2">Needs Approval</div>
+                <h2 class="display-4 fw-bold mb-0 <%= stats.pendingUsers > 0 ? 'text-danger' : 'text-success' %>"><%= stats.pendingUsers %></h2>
+                <a href="/admin/users" class="stretched-link"></a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 bg-white shadow-sm rounded-4 p-4 h-100 position-relative overflow-hidden">
+                <i class="fas fa-building position-absolute opacity-10 text-brand" style="font-size: 6rem; right: -15px; bottom: -15px;"></i>
+                <div class="text-uppercase small fw-bold text-muted mb-2">Departments</div>
+                <h2 class="display-4 fw-bold mb-0 text-brand"><%= stats.departments %></h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Creation Forms -->
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card border-0 bg-white shadow-sm rounded-4 p-4 h-100">
+                <h5 class="fw-bold mb-4 text-brand"><i class="fas fa-plus-circle me-2 text-primary"></i>New Department</h5>
+                <form action="/admin/departments" method="POST">
+                    <div class="mb-3"><input type="text" name="name" placeholder="Department Name" required class="form-control bg-light border-0"></div>
+                    <div class="mb-3"><input type="text" name="hodName" placeholder="HOD Name" required class="form-control bg-light border-0"></div>
+                    <div class="mb-3"><textarea name="vision" placeholder="Vision" required class="form-control bg-light border-0" rows="2"></textarea></div>
+                    <div class="mb-4"><textarea name="mission" placeholder="Mission" required class="form-control bg-light border-0" rows="2"></textarea></div>
+                    <button type="submit" class="btn btn-primary w-100 fw-bold rounded-3">Create Department</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card border-0 bg-white shadow-sm rounded-4 p-4 h-100">
+                <h5 class="fw-bold mb-4 text-brand"><i class="fas fa-layer-group me-2 text-success"></i>New Club</h5>
+                <form action="/admin/clubs" method="POST">
+                    <div class="mb-3"><input type="text" name="name" placeholder="Club Name" required class="form-control bg-light border-0"></div>
+                    <div class="mb-3"><input type="text" name="department" placeholder="Department (e.g., CSE-CS)" required class="form-control bg-light border-0"></div>
+                    <div class="mb-4"><textarea name="description" placeholder="Short Description" required class="form-control bg-light border-0" rows="4"></textarea></div>
+                    <button type="submit" class="btn btn-success w-100 fw-bold rounded-3">Create Club</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 bg-white shadow-sm rounded-4 p-4 h-100">
+                <h5 class="fw-bold mb-4 text-brand"><i class="fas fa-calendar-alt me-2 text-warning"></i>Global Event</h5>
+                <form action="/admin/events" method="POST">
+                    <div class="mb-3"><input type="text" name="title" placeholder="Event Title" required class="form-control bg-light border-0"></div>
+                    <div class="mb-3">
+                        <select name="type" class="form-select bg-light border-0" required>
+                            <option value="Workshop">Workshop</option>
+                            <option value="Hackathon">Hackathon</option>
+                            <option value="Seminar">Seminar</option>
+                        </select>
+                    </div>
+                    <div class="mb-3"><input type="date" name="date" required class="form-control bg-light border-0"></div>
+                    <div class="mb-3"><input type="text" name="location" placeholder="Location" required class="form-control bg-light border-0"></div>
+                    <div class="mb-4"><textarea name="description" placeholder="Event Description" required class="form-control bg-light border-0" rows="2"></textarea></div>
+                    <button type="submit" class="btn btn-warning w-100 fw-bold rounded-3">Create Event</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

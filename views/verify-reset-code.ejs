@@ -1,0 +1,44 @@
+<%- include('partials/header') %>
+
+    <div class="row justify-content-center py-5">
+        <div class="col-md-5">
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                <div class="card-header bg-dark text-white p-4 border-0">
+                    <h4 class="mb-0 fw-bold"><i class="fas fa-shield-alt me-2 text-warning"></i>Verify Code</h4>
+                    <p class="mb-0 small opacity-75">We sent an 8-character verification code to <%= email %></p>
+                </div>
+                <div class="card-body p-4">
+                    <% if (typeof error !=='undefined' && error) { %>
+                        <div class="alert alert-danger border-0 small shadow-sm mb-4">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <%= error %>
+                        </div>
+                    <% } %>
+
+                    <div class="alert alert-info border-0 shadow-sm small fw-bold mb-4">
+                        <i class="fas fa-info-circle me-1"></i> Please check your email inbox (and spam folder) for the verification code.
+                    </div>
+
+                    <form action="/auth/verify-reset-code" method="POST">
+                        <input type="hidden" name="email" value="<%= email %>">
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-muted text-uppercase">8-Character Verification Code</label>
+                            <div class="input-group shadow-sm">
+                                <span class="input-group-text bg-light border-0"><i class="fas fa-key text-muted"></i></span>
+                                <input type="text" class="form-control bg-light border-0" name="tempPassword"
+                                    placeholder="Enter your code" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-warning w-100 py-3 fw-bold shadow-sm rounded-pill text-dark">Verify & Continue</button>
+                    </form>
+                </div>
+                <div class="card-footer bg-light border-0 text-center py-3">
+                    <a href="/auth/forgot-password" class="text-dark small text-decoration-none fw-bold"><i class="fas fa-arrow-left me-1"></i> Did not receive code? Try again</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,565 @@
+<%- include('../partials/header') %>
+
+    <!-- Department Hero Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="premium-card hero-gradient p-5 text-white rounded-4 shadow-lg position-relative overflow-hidden">
+                <div class="row align-items-center z-1 position-relative">
+                    <div class="col-lg-8">
+                        <span class="badge glass-card mb-3 px-3 py-2 text-uppercase tracking-wider">Department Profile</span>
+                        <h1 class="display-3 fw-800 mb-2 mt-2"><%= department.name %></h1>
+                        <p class="lead opacity-85 mb-4" style="max-width: 600px;">
+                            <%= department.vision %>
+                        </p>
+                        <div class="d-flex flex-wrap gap-3">
+                            <div class="glass-card px-3 py-2 rounded-3 d-flex align-items-center">
+                                <i class="fas fa-user-tie me-2 text-warning"></i>
+                                <small>HOD: <span class="fw-bold"><%= department.hodName %></span></small>
+                            </div>
+                            <div class="glass-card px-3 py-2 rounded-3 d-flex align-items-center">
+                                <i class="fas fa-users me-2 text-info"></i>
+                                <small>Faculty: <span class="fw-bold"><%= department.totalFaculty %></span></small>
+                            </div>
+                            <div class="glass-card px-3 py-2 rounded-3 d-flex align-items-center">
+                                <i class="fas fa-chart-line me-2 text-success"></i>
+                                <small>Placements: <span class="fw-bold"><%= department.placementRate %>%</span></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 text-center d-none d-lg-block">
+                        <i class="fas fa-university opacity-10 position-absolute end-0 top-50 translate-middle-y me-n5" style="font-size: 20rem;"></i>
+                        <div class="premium-card bg-white text-dark p-4 d-inline-block shadow-lg border-0 rotating-border" style="width: 200px;">
+                            <h2 class="fw-800 mb-0 text-brand"><%= achievements.length %></h2>
+                            <p class="small text-muted text-uppercase mb-0">Total Successes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <ul class="nav nav-pills nav-premium mb-5 justify-content-center gap-3" id="deptTabs" role="tablist">
+        <li class="nav-item">
+            <button class="nav-link active rounded-pill px-4 fw-bold" data-bs-toggle="pill" data-bs-target="#overview">Mission & Goals</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link rounded-pill px-4 fw-bold" data-bs-toggle="pill" data-bs-target="#faculty">Faculty Directory</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link rounded-pill px-4 fw-bold" data-bs-toggle="pill" data-bs-target="#events">Events</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link rounded-pill px-4 fw-bold" data-bs-toggle="pill" data-bs-target="#achievements" id="achievements-tab">Achievements</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="deptTabsContent">
+        <!-- Overview Tab -->
+        <div class="tab-pane fade show active" id="overview">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="premium-card p-5 h-100 shadow-sm border-0">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="bg-brand-light p-3 rounded-4 me-3">
+                                <i class="fas fa-bullseye text-brand fa-2x"></i>
+                            </div>
+                            <h3 class="fw-bold mb-0 text-brand">Mission</h3>
+                        </div>
+                        <p class="text-secondary lh-lg"><%= department.mission %></p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="premium-card p-5 h-100 shadow-sm border-0 bg-light-gradient">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="bg-warning-light p-3 rounded-4 me-3">
+                                <i class="fas fa-rocket text-warning fa-2x"></i>
+                            </div>
+                            <h3 class="fw-bold mb-0">Core Objectives</h3>
+                        </div>
+                        <ul class="list-unstyled">
+                            <% department.peos.forEach(peo => { %>
+                                <li class="mb-3 d-flex align-items-start">
+                                    <i class="fas fa-check-circle text-success mt-1 me-3"></i>
+                                    <span class="text-dark small fw-medium"><%= peo %></span>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Faculty Tab -->
+        <div class="tab-pane fade" id="faculty">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold text-dark">Faculty Members</h3>
+                <% if (typeof user !== 'undefined' && user && (user.role === 'Admin' || user.role === 'HOD')) { %>
+                    <button class="btn btn-brand rounded-pill px-4 btn-sm" data-bs-toggle="modal" data-bs-target="#addFacultyModal">
+                        <i class="fas fa-plus me-2"></i>Add Faculty
+                    </button>
+                <% } %>
+            </div>
+            <div class="row g-4">
+                <% faculty.forEach(f => { %>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="premium-card text-center p-4 hover-up transition h-100 border-0 shadow-sm">
+                            <div class="position-relative d-inline-block mb-3">
+                                <img src="/images/avatar-placeholder.png" class="rounded-circle border border-4 border-white shadow-sm" style="width: 100px; height: 100px; object-fit: cover;" alt="Faculty">
+                                <span class="position-absolute bottom-0 end-0 badge bg-success border border-white rounded-circle p-2"><i class="fas fa-check small"></i></span>
+                            </div>
+                            <h5 class="fw-bold mb-1 text-dark"><%= f.name %></h5>
+                            <p class="text-brand small fw-600 mb-2"><%= f.designation %></p>
+                            <div class="bg-light rounded-pill py-1 px-3 mb-3 d-inline-block">
+                                <small class="text-muted"><%= f.specialization %></small>
+                            </div>
+                            <div class="d-flex justify-content-center gap-2">
+                                <a href="mailto:<%= f.email %>" class="btn btn-light btn-sm rounded-circle"><i class="fas fa-envelope text-muted"></i></a>
+                                <a href="#" class="btn btn-light btn-sm rounded-circle"><i class="fab fa-linkedin-in text-muted"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+                <% if (faculty.length === 0) { %>
+                    <div class="col-12 text-center py-5">
+                        <div class="opacity-25 mb-4"><i class="fas fa-user-friends fa-4x"></i></div>
+                        <h4 class="text-muted">No faculty profiles recorded.</h4>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+
+        <!-- Events Tab -->
+        <div class="tab-pane fade" id="events">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold text-dark">Events & Activities</h3>
+                <% if (typeof user !== 'undefined' && user && (user.role === 'Admin' || user.role === 'HOD')) { %>
+                    <button class="btn btn-brand rounded-pill px-4 btn-sm" data-bs-toggle="modal" data-bs-target="#addEventModal">
+                        <i class="fas fa-calendar-plus me-2"></i>Create Event
+                    </button>
+                <% } %>
+            </div>
+            <div class="row g-4">
+                <% events.forEach(event => { %>
+                    <div class="col-md-6">
+                        <div class="premium-card d-flex overflow-hidden h-100 border-0 shadow-sm">
+                            <div class="event-date bg-brand text-white p-4 d-flex flex-column align-items-center justify-content-center" style="min-width: 100px;">
+                                <h2 class="mb-0 fw-bold"><%= new Date(event.date).getDate() %></h2>
+                                <small class="text-uppercase"><%= new Date(event.date).toLocaleString('default', { month: 'short' }) %></small>
+                            </div>
+                            <div class="p-4">
+                                <div class="badge bg-light text-brand small mb-2"><%= event.type %></div>
+                                <h5 class="fw-bold mb-2"><%= event.title %></h5>
+                                <p class="small text-muted mb-0"><i class="fas fa-map-marker-alt me-2"></i><%= event.clubName %></p>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+                <% if (events.length === 0) { %>
+                    <div class="col-12 text-center py-5">
+                        <div class="opacity-25 mb-4"><i class="fas fa-calendar-times fa-4x"></i></div>
+                        <h4 class="text-muted">No upcoming events scheduled.</h4>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+
+        <!-- Achievements Tab -->
+        <div class="tab-pane fade" id="achievements">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+                <div>
+                    <h3 class="fw-bold text-dark mb-1">Student & Faculty Achievements</h3>
+                    <p class="text-muted small mb-0">Discover milestones and recognition across the department.</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="/departments/<%= department._id %>/analysis" class="btn btn-outline-brand rounded-pill px-4 btn-sm">
+                        <i class="fas fa-chart-pie me-2"></i>Analysis
+                    </a>
+                    <% if (typeof user !== 'undefined' && user && (user.role === 'Admin' || user.role === 'HOD')) { %>
+                        <button class="btn btn-success rounded-pill px-4 btn-sm" data-bs-toggle="modal" data-bs-target="#uploadAchievementModal">
+                            <i class="fas fa-file-excel me-2"></i>Upload Excel/CSV
+                        </button>
+                        <a href="/departments/<%= department._id %>/achievements" class="btn btn-brand rounded-pill px-4 btn-sm">
+                            <i class="fas fa-plus me-2"></i>Manual Entry
+                        </a>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="row align-items-center mb-4 g-3">
+                <div class="col-md-4">
+                    <div class="input-group glass-bg rounded-pill px-3 py-1 shadow-sm">
+                        <span class="input-group-text bg-transparent border-0"><i class="fas fa-search text-muted"></i></span>
+                        <input type="text" id="achievementSearch" class="form-control bg-transparent border-0 shadow-none ps-0" placeholder="Search by student, roll no, or event...">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select id="levelFilter" class="form-select rounded-pill border-0 shadow-sm ps-3">
+                        <option value="All Levels">All Levels</option>
+                        <option value="Local">Local</option>
+                        <option value="State">State</option>
+                        <option value="National">National</option>
+                        <option value="International">International</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select id="categoryFilter" class="form-select rounded-pill border-0 shadow-sm ps-3">
+                        <option value="All Categories">All Categories</option>
+                        <option value="COURSE">Course (NPTEL)</option>
+                        <option value="COMPETITION">Competition</option>
+                        <option value="HACKATHON">Hackathon</option>
+                        <option value="CERTIFICATION">Certification</option>
+                        <option value="WORKSHOP">Workshop</option>
+                        <option value="RESEARCH">Research</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select id="batchFilter" class="form-select rounded-pill border-0 shadow-sm ps-3">
+                        <option value="All Batches">All Batches</option>
+                        <!-- Batches will be populated dynamically or static if known -->
+                        <% 
+                           const batches = [...new Set(achievements.map(a => {
+                               const r = a.rollNumber || '';
+                               const m = r.match(/^(\d{2})/);
+                               if (!m) return 'Other';
+                               let y = parseInt(m[1]);
+                               if (r.toUpperCase().includes('15A')) y -= 1;
+                               return `Batch 20${y}-20${y+4}`;
+                           }))].sort().reverse();
+                           batches.forEach(b => { 
+                        %>
+                            <option value="<%= b %>"><%= b %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="col-md-2 text-md-end">
+                    <span class="text-muted small fw-bold" id="resultCount"><%= achievements.length %> Results</span>
+                </div>
+            </div>
+
+            <div class="premium-card p-0 shadow-sm border-0 overflow-hidden">
+                <div class="table-responsive table-container" style="max-height: 600px;">
+                    <table class="table table-hover align-middle mb-0" id="achievementsTable">
+                        <thead class="bg-light sticky-top">
+                            <tr class="text-nowrap small text-uppercase fw-bold text-muted">
+                                <th class="ps-4">S.No</th>
+                                <th>Roll No</th>
+                                <th>Batch</th>
+                                <th>Student Name</th>
+                                <th>Event Name</th>
+                                <th>Level</th>
+                                <th>Date</th>
+                                <th>Award</th>
+                                <th>College</th>
+                                <th>Ph.no</th>
+                                <th class="pe-4">Total Students</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% achievements.forEach((a, index) => { 
+                                const roll = a.rollNumber || '';
+                                const match = roll.match(/^(\d{2})/);
+                                let batch = 'Other';
+                                if (match) {
+                                    let yr = parseInt(match[1]);
+                                    if (roll.toUpperCase().includes('15A')) yr -= 1;
+                                    batch = `Batch 20${yr}-20${yr+4}`;
+                                }
+                            %>
+                                <tr class="achievement-row small text-dark" 
+                                    data-level="<%= a.level %>" 
+                                    data-category="<%= a.category %>"
+                                    data-batch="<%= batch %>">
+                                    <td class="ps-4 fw-bold text-muted row-index"><%= index + 1 %></td>
+                                    <td><span class="badge bg-light text-dark fw-bold"><%= a.rollNumber %></span></td>
+                                    <td class="fw-bold small text-muted"><%= batch %></td>
+                                    <td class="fw-bold student-name-cell"><%= a.studentName %></td>
+                                    <td class="event-title-cell text-wrap" style="max-width: 250px;"><%= a.title %></td>
+                                    <td>
+                                        <span class="badge rounded-pill px-3 py-1 level-badge <%= a.level === 'National' ? 'bg-primary' : a.level === 'International' ? 'bg-warning text-dark' : a.level === 'State' ? 'bg-info text-white' : 'bg-secondary' %>">
+                                            <%= a.level %>
+                                        </span>
+                                    </td>
+                                    <td class="text-nowrap"><%= a.date %></td>
+                                    <td><span class="text-success fw-bold"><%= a.award %></span></td>
+                                    <td class="text-muted small"><%= a.collegeName %></td>
+                                    <td class="small"><%= a.phoneNumber %></td>
+                                    <td class="text-center pe-4"><%= a.totalStudents %></td>
+                                </tr>
+                            <% }) %>
+                            <% if (achievements.length === 0) { %>
+                                <tr>
+                                    <td colspan="10" class="text-center py-5">
+                                        <div class="opacity-25 mb-3"><i class="fas fa-trophy fa-3x"></i></div>
+                                        <h5 class="text-muted">No achievements recorded yet.</h5>
+                                    </td>
+                                </tr>
+                            <% } %>
+                            <tr id="noResultsRow" style="display: none;">
+                                <td colspan="10" class="text-center py-5">
+                                    <div class="opacity-25 mb-3"><i class="fas fa-search fa-3x"></i></div>
+                                    <h5 class="text-muted">No matching achievements found.</h5>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add Faculty Modal -->
+    <div class="modal fade" id="addFacultyModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow-lg">
+                <div class="modal-header bg-brand text-white p-4 border-0">
+                    <h5 class="modal-title fw-bold">Add Faculty Profile</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="/departments/<%= department._id %>/faculty" method="POST">
+                    <div class="modal-body p-4 bg-light bg-opacity-50">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Full Name</label>
+                            <input type="text" name="name" class="form-control border-0 shadow-sm" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Designation</label>
+                            <input type="text" name="designation" class="form-control border-0 shadow-sm" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Specialization</label>
+                            <input type="text" name="specialization" class="form-control border-0 shadow-sm" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Email</label>
+                            <input type="email" name="email" class="form-control border-0 shadow-sm" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer p-4 border-0">
+                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-brand rounded-pill px-4">Save Faculty</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Event Modal -->
+    <div class="modal fade" id="addEventModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow-lg">
+                <div class="modal-header bg-brand text-white p-4 border-0">
+                    <h5 class="modal-title fw-bold">Schedule New Event</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="/departments/<%= department._id %>/events" method="POST">
+                    <div class="modal-body p-4 bg-light bg-opacity-50">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Event Title</label>
+                            <input type="text" name="title" class="form-control border-0 shadow-sm" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Event Type</label>
+                            <select name="type" class="form-select border-0 shadow-sm" required>
+                                <option value="Workshop">Workshop</option>
+                                <option value="Seminar">Seminar</option>
+                                <option value="Hackathon">Hackathon</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Date</label>
+                            <input type="date" name="date" class="form-control border-0 shadow-sm" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Club/Organization Name</label>
+                            <input type="text" name="clubName" class="form-control border-0 shadow-sm" required>
+                        </div>
+                        <!-- Hidden field to satisfy Event schema createdBy -->
+                        <% if (typeof user !== 'undefined' && user) { %>
+                            <input type="hidden" name="createdBy" value="<%= user._id %>">
+                        <% } %>
+                    </div>
+                    <div class="modal-footer p-4 border-0">
+                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-brand rounded-pill px-4">Schedule Event</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Achievement Modal -->
+    <div class="modal fade" id="uploadAchievementModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow-lg">
+                <div class="modal-header bg-success text-white p-4 border-0">
+                    <h5 class="modal-title fw-bold">Batch Upload Achievements</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="/departments/<%= department._id %>/upload" method="POST" enctype="multipart/form-data">
+                    <div class="modal-body p-4 bg-light bg-opacity-50">
+                        <div class="premium-card bg-white p-4 text-center border-dashed mb-4">
+                            <i class="fas fa-cloud-upload-alt text-success fa-3x mb-3"></i>
+                            <h6>Select Spreadsheet File</h6>
+                            <p class="small text-muted mb-3">Support for .xlsx and .csv formats</p>
+                            <input type="file" name="file" class="form-control" accept=".xlsx, .csv" required>
+                        </div>
+                        <div class="alert alert-info border-0 shadow-sm small">
+                            <i class="fas fa-info-circle me-2"></i><strong>Formatting Tip:</strong>
+                            Ensure your spreadsheet contains columns like <i>Roll No</i>, <i>Name of the Student</i>, and <i>Name of the Event</i>.
+                        </div>
+                    </div>
+                    <div class="modal-footer p-4 border-0">
+                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success rounded-pill px-4">Start Processing</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ensure tab switch on hash -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hash = window.location.hash;
+            if (hash) {
+                const tabTrigger = document.querySelector(`button[data-bs-target="${hash}"]`);
+                if (tabTrigger) {
+                    const tab = new bootstrap.Tab(tabTrigger);
+                    tab.show();
+                }
+            }
+
+            // Achievement Filtering Logic
+            const searchInput = document.getElementById('achievementSearch');
+            const levelFilter = document.getElementById('levelFilter');
+            const categoryFilter = document.getElementById('categoryFilter');
+            const batchFilter = document.getElementById('batchFilter');
+            const tableRows = document.querySelectorAll('.achievement-row');
+            const noResultsRow = document.getElementById('noResultsRow');
+            const resultCount = document.getElementById('resultCount');
+
+            function filterTable() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedLevel = levelFilter.value;
+                const selectedCategory = categoryFilter.value;
+                const selectedBatch = batchFilter.value;
+                let visibleCount = 0;
+
+                tableRows.forEach(row => {
+                    const studentName = row.querySelector('.student-name-cell').textContent.toLowerCase();
+                    const eventTitle = row.querySelector('.event-title-cell').textContent.toLowerCase();
+                    const rollNo = row.querySelector('.badge').textContent.toLowerCase();
+                    const rowLevel = row.getAttribute('data-level');
+                    const rowCategory = row.getAttribute('data-category');
+                    const rowBatch = row.getAttribute('data-batch');
+
+                    const matchesSearch = studentName.includes(searchTerm) || eventTitle.includes(searchTerm) || rollNo.includes(searchTerm);
+                    const matchesLevel = selectedLevel === 'All Levels' || rowLevel === selectedLevel;
+                    const matchesCategory = selectedCategory === 'All Categories' || rowCategory === selectedCategory;
+                    const matchesBatch = selectedBatch === 'All Batches' || rowBatch === selectedBatch;
+
+                    if (matchesSearch && matchesLevel && matchesCategory && matchesBatch) {
+                        row.style.display = '';
+                        visibleCount++;
+                        // Update S.No for visible rows
+                        row.querySelector('.row-index').textContent = visibleCount;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                noResultsRow.style.display = visibleCount === 0 ? '' : 'none';
+                resultCount.textContent = `${visibleCount} Results`;
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener('input', filterTable);
+                levelFilter.addEventListener('change', filterTable);
+                categoryFilter.addEventListener('change', filterTable);
+                batchFilter.addEventListener('change', filterTable);
+            }
+        });
+    </script>
+    
+    <style>
+        .nav-premium .nav-link {
+            color: #6c757d;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            transition: all 0.3s ease;
+        }
+        .nav-premium .nav-link:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+        .nav-premium .nav-link.active {
+            background-color: #021849;
+            color: white;
+            border-color: #021849;
+            box-shadow: 0 4px 15px rgba(2, 24, 73, 0.2);
+        }
+        .glass-bg {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .sticky-top {
+            z-index: 10;
+            background: white !important;
+        }
+        .achievement-row {
+            transition: background-color 0.2s ease;
+        }
+        .achievement-row:hover {
+            background-color: rgba(2, 24, 73, 0.02) !important;
+        }
+        .level-badge {
+            min-width: 100px;
+            text-align: center;
+        }
+        .table-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .table-container::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 4px;
+        }
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: #021849;
+        }
+        .tracking-wider {
+            letter-spacing: 0.1rem;
+        }
+        .bg-brand-light { background-color: rgba(2, 24, 73, 0.1); }
+        .bg-warning-light { background-color: rgba(255, 193, 7, 0.1); }
+        .hero-gradient {
+            background: linear-gradient(135deg, #021849 0%, #052c7d 100%);
+        }
+        .border-dashed {
+            border: 2px dashed #dee2e6;
+        }
+        .rotating-border {
+            position: relative;
+        }
+        .rotating-border::after {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, #021849, #ffc107, #021849);
+            z-index: -1;
+            border-radius: inherit;
+            animation: rotate 4s linear infinite;
+        }
+        @keyframes rotate {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+    </style>
+
+<%- include('../partials/footer') %>

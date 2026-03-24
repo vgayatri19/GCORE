@@ -1,0 +1,130 @@
+<%- include('../partials/header') %>
+
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="premium-card p-5 shadow-sm border-0">
+                <h2 class="fw-800 mb-4 text-brand">Add New Achievement</h2>
+                <p class="text-muted mb-4">Record a new milestone for the <strong>
+                        <%= department.name %>
+                    </strong> department.</p>
+
+                <form action="/departments/<%= department._id %>/achievements" method="POST">
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold small">Achievement Title</label>
+                            <input type="text" name="title" class="form-control"
+                                placeholder="e.g. Smart India Hackathon Winner" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Category</label>
+                            <select name="category" class="form-select" required>
+                                <option value="HACKATHON">Hackathon</option>
+                                <option value="WORKSHOP">Workshop</option>
+                                <option value="INTERNSHIP">Internship</option>
+                                <option value="COMPETITION">Competition</option>
+                                <option value="RESEARCH">Research</option>
+                                <option value="CERTIFICATION">Certification</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Achievement Type</label>
+                            <select name="type" class="form-select" required>
+                                <option value="TECHNICAL">Technical</option>
+                                <option value="NON_TECHNICAL">Non-Technical</option>
+                                <option value="SPORTS">Sports</option>
+                                <option value="CULTURAL">Cultural</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Year / Level</label>
+                            <select name="year" class="form-select" required>
+                                <option value="1st Year">1st Year</option>
+                                <option value="2nd Year">2nd Year</option>
+                                <option value="3rd Year">3rd Year</option>
+                                <option value="4th Year">4th Year</option>
+                                <option value="Faculty">Faculty / Professional</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Level</label>
+                            <select name="level" class="form-select" required>
+                                <option value="Local">Local</option>
+                                <option value="State">State</option>
+                                <option value="National">National</option>
+                                <option value="International">International</option>
+                                <option value="N/A">N/A</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Date of Event</label>
+                            <input type="text" name="date" class="form-control" placeholder="e.g. 30, 31 Oct 2025" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Roll Number (Students Only)</label>
+                            <input type="text" name="rollNumber" class="form-control" placeholder="e.g. 21GCET0101"
+                                required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Achiever Name</label>
+                            <input type="text" name="studentName" class="form-control" placeholder="Full Name" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Phone Number</label>
+                            <input type="tel" name="phoneNumber" class="form-control" placeholder="e.g. 9876543210">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Total Students</label>
+                            <input type="number" name="totalStudents" class="form-control" value="1" min="1">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Name of the Award</label>
+                            <input type="text" name="award" class="form-control" placeholder="e.g. Participation / 1st Prize" value="Participation">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Name of College</label>
+                            <input type="text" name="collegeName" class="form-control" placeholder="College Name" value="Geethanjali College of Engineering & Technology">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Achiever Role</label>
+                            <select name="achieverRole" class="form-select" required>
+                                <option value="PARTICIPANT">Participant</option>
+                                <option value="WINNER">Winner</option>
+                                <option value="RUNNER_UP">Runner-up</option>
+                                <option value="ORGANIZER">Organizer</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold small">Description / Highlights</label>
+                            <textarea name="description" class="form-control" rows="3"
+                                placeholder="Briefly describe the achievement..."></textarea>
+                        </div>
+
+                        <div class="col-md-12 mt-4">
+                            <button type="submit" class="btn btn-brand w-100 py-3 rounded-pill fw-bold">Publish
+                                Achievement</button>
+                            <a href="/departments/<%= department._id %>"
+                                class="btn btn-link w-100 text-muted mt-2">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>

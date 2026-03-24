@@ -1,0 +1,74 @@
+<%- include('../partials/header') %>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white p-4">
+                    <h2 class="mb-0"><i class="fas fa-calendar-plus me-2"></i>Propose New Club Event</h2>
+                    <p class="mb-0 small opacity-75">Submit your proposal for hierarchical approval.</p>
+                </div>
+                <div class="card-body p-4">
+                    <form action="/events" method="POST">
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold">Event Title</label>
+                                <input type="text" name="title" class="form-control"
+                                    placeholder="e.g. Annual Tech Symposium" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Event Type</label>
+                                <select name="type" class="form-select" required>
+                                    <option value="Workshop">Workshop</option>
+                                    <option value="Seminar">Seminar</option>
+                                    <option value="Hackathon">Hackathon</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Event Date</label>
+                                <input type="datetime-local" name="date" class="form-control" required>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold">Location</label>
+                                <input type="text" name="location" class="form-control"
+                                    placeholder="e.g. Auditorium 2 / Zoom Link" required>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold">Coordinator Name (Lead Person)</label>
+                                <input type="text" name="coordinator" class="form-control"
+                                    placeholder="Enter name of faculty or student lead" required>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold">Description</label>
+                                <textarea name="description" class="form-control" rows="4"
+                                    placeholder="Briefly describe the event objectives and intended audience..."
+                                    required></textarea>
+                            </div>
+
+                            <div class="col-12 mt-4 text-end">
+                                <a href="/clubs" class="btn btn-light px-4 me-2">Cancel</a>
+                                <button type="submit" class="btn btn-primary px-5 fw-bold text-white">Submit for
+                                    Approval</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="alert alert-info mt-4 border-0 shadow-sm">
+                <h6 class="fw-bold"><i class="fas fa-info-circle me-2"></i>Approval Process</h6>
+                <p class="small mb-0">Your proposal will follow this hierarchy:
+                    <strong>Coordinator</strong> → <strong>HOD</strong> → <strong>Dean</strong> →
+                    <strong>Director</strong>.
+                    Once approved by the Director, it will be visible to club members.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
